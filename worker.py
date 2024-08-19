@@ -14,7 +14,7 @@ ack_topic_path = ack_publisher.topic_path(project_id, ack_topic_id)
 
 def callback(message):
 
-    print(f"Received message: {message.data.decode('utf-8')}")
+    #print(f"Received message: {message.data.decode('utf-8')}")
     data_str = message.data.decode('utf-8')
     zip_codes = json.loads(data_str)
     offenders = get_offenders(zip_codes)
