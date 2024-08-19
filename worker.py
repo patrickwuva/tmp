@@ -5,9 +5,12 @@ import json
 
 project_id = "global-sun-431221-s9"
 subscription_id = "scrape"
+ack_topic_id = 'taskmaster-acks'
 
 subscriber = pubsub_v1.SubscriberClient()
 subscription_path = subscriber.subscription_path(project_id, subscription_id)
+ack_publisher = pubsub_v1.PublisherClient()
+ack_topic_path = ack_publisher.topic_path(project_id, ack_topic_id)
 
 def callback(message):
 
@@ -17,6 +20,8 @@ def callback(message):
     offenders = get_offenders(zip_codes)
     insert_offenders(offenders)
     print(f'done with {zip_codes}')
+
+    ack_publisher.publish(ack_topic_path, b'',zip_codes=json.dumps(zip_codes))
     message.ack()
 
 streaming_pull_future = subscriber.subscribe(subscription_path, callback=callback)
