@@ -46,24 +46,24 @@ def insert_offenders(offenders):
     INSERT INTO offenders (first_name, last_name, age, home_addr, info_link, image_link, state, zipcode)
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     """
-    offender_values = [
-        (
-            offender["first_name"],
-            offender["last_name"],
-            offender["age"],
-            json.dumps(offender["home_addr"]) if offender['home_addr'] else None,
-            offender["info_link"],
-            offender["image_link"],
-            offender["state"],
-            offender["zipcode"]
-        )
-        for offender in offenders
-    ]
-    try:
-        db.cursor.executemany(query, offender_values)
-        db.connection.commit()
-    except Exception as e:
-        print(f'error: {e}')
-        db.connection.rollback()
-    finally:
-        db.close()
+    if offenders != None:
+        offender_values =[
+            (
+                offender["first_name"],
+                offender["last_name"],
+                offender["age"],
+                json.dumps(offender["home_addr"]) if offender['home_addr'] else None,
+                offender["info_link"],
+                offender["image_link"],
+                offender["state"],
+                offender["zipcode"]
+            )
+            for offender in offenders
+        ]
+        try:
+            db.cursor.executemany(query, offender_values)
+            db.connection.commit()
+        except Exception as e:
+            print(f'error: {e}')
+            db.connection.rollback()
+    db.close()
