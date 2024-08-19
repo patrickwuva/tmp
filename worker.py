@@ -3,8 +3,8 @@ from add_offenders import insert_offenders
 from get_offenders import get_offenders
 import json
 
-project_id = "your-project-id"
-subscription_id = "your-subscription-id"
+project_id = "global-sun-431221-s9"
+subscription_id = "scrape"
 
 subscriber = pubsub_v1.SubscriberClient()
 subscription_path = subscriber.subscription_path(project_id, subscription_id)
