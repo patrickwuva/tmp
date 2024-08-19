@@ -41,7 +41,7 @@ def clean_offenders(raw_offenders):
 
 def insert_offenders(offenders):
     db = based()
-        db.connect()
+    db.connect()
     query = """
     INSERT INTO offenders (first_name, last_name, age, home_addr, info_link, image_link, state, zipcode)
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
