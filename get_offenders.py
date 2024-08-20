@@ -7,7 +7,7 @@ def load_proxies(file_path):
         proxies = f.read().splitlines()
     return proxies
 
-proxies_list = load_proxies("endpoints.txt")
+proxies_list = load_proxies("proxies.txt")
 proxy_index = 0
 retry_zips = []
 
