@@ -1,6 +1,7 @@
 import cloudscraper, random
 import json
 from add_offenders import clean_offenders
+import time
 
 def get_next_proxy():
     global proxy_index
@@ -17,11 +18,9 @@ proxies_list = load_proxies("endpoints.txt")
 proxy_index = 0
 retry_zips = []
 
-def get_offenders(zip_arr, r=0):
-    if r >= 5:
-        return None
-
-    proxy = get_next_proxy()
+def get_offenders(zip_arr):
+    #proxy = get_next_proxy()
+    proxy = "http://customer-patrick_5zLji-cc-us:OX___psalm3422@pr.oxylabs.io:7777"
     proxies = {
         "http": proxy
     }
@@ -76,14 +75,12 @@ def get_offenders(zip_arr, r=0):
                 print(f"Response text: {response.text}")
 
         elif response.status_code == 429:
-            r += 1
-            print(f"Rate limit hit for zip {zip_arr}, retrying... Attempt {r}")
-            return get_offenders(zip_arr, r)
+            time.sleep(3)
+            return get_offenders(zip_arr)
         else:
-            r += 1
             print(f"Search failed with status code: {response.status_code} for zip {zip_arr}")
             print(f"Response text: {response.text}")
-            return get_offenders(zip_arr, r)
+            return get_offenders(zip_arr)
     except Exception as exc:
         print(f"An error occurred: {exc} for zip {zip_arr}")
 
