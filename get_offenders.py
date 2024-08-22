@@ -7,7 +7,7 @@ def load_proxies(file_path):
         proxies = f.read().splitlines()
     return proxies
 
-proxies_list = load_proxies("proxies.txt")
+proxies_list = load_proxies("endpoints.txt")
 proxy_index = 0
 retry_zips = []
 
@@ -17,7 +17,7 @@ def get_next_proxy():
     proxy_index = (proxy_index + 1) % len(proxies_list)
     return proxy
 
-def get_offenders(zip_arr, r=0):
+def get_offenders(zip_arr, r):
     if r >= 5:
         return None
 
@@ -59,6 +59,20 @@ def get_offenders(zip_arr, r=0):
         response = scraper.post(search_url, headers=search_headers, json=search_data, proxies=proxies)
 
         if response.status_code == 200:
+            content = response.headers.get('Content-Type')
+            if content and 'application/json' in content:
+                try:
+                    data = response.json()
+                    if 'offenders' in data:
+                        offenders = clean_offenders(data['offenders'])
+                        return offenders
+                    else:
+                        print(f'No offenders data for zip {zip_arr}: {response.text}')
+                except json.JSONDecodeError:
+                    print(f'Error decoding JSON for zip {zip_zip}: {response.text}')
+            else:
+                print(f'unexpected content type: {content_type}')
+                print(f'response text: {response.text}')
             for z in zip_arr:
                 if z in retry_zips:
                     retry_zips.remove(z)
@@ -68,12 +82,12 @@ def get_offenders(zip_arr, r=0):
 
         elif response.status_code == 429:
             r+=1
-            print(response.json())
+            print(f'response: {response.json()}')
             return get_offenders(zip_arr, r)
         else:
             r+=1
             print(f"Search failed with status code: {response.status_code}")
-            print(response.json())
+            print(f'response: {response.json()}')
             get_offenders(zip_arr, r)
     except Exception as exc:
         print(f"An error occurred: {exc}")

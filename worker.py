@@ -17,13 +17,12 @@ def callback(message):
     #print(f"Received message: {message.data.decode('utf-8')}")
     data_str = message.data.decode('utf-8')
     zip_codes = json.loads(data_str)
-    offenders = get_offenders(zip_codes)
+    offenders = get_offenders(zip_codes, 0)
     if offenders != None:
         insert_offenders(offenders)
         print(f'done with {zip_codes}')
-    print(f'none for zip {zip_codes}')
-    ack_publisher.publish(ack_topic_path, b'',zip_codes=json.dumps(zip_codes))
-    message.ack()
+        ack_publisher.publish(ack_topic_path, b'',zip_codes=json.dumps(zip_codes))
+        message.ack()
 
 streaming_pull_future = subscriber.subscribe(subscription_path, callback=callback)
 print(f"Listening for messages on {subscription_path}...")
