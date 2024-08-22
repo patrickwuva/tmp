@@ -23,3 +23,8 @@ class based:
         query = "SELECT version();"
         self.cursor.execute(query)
         return(self.cursor.fetchone())
+
+    def get_zips(self):
+        self.cursor.execute("SELECT DISTINCT zipcode FROM offenders")
+        return [z[0] for z in self.cursor.fetchall()]
+
