@@ -67,11 +67,13 @@ def get_offenders(zip_arr, r=0):
             return offenders
 
         elif response.status_code == 429:
+            r+=1
             print(response.json())
-            return get_offenders(zip_arr, r+=1)
+            return get_offenders(zip_arr, r)
         else:
+            r+=1
             print(f"Search failed with status code: {response.status_code}")
             print(response.json())
-            get_offenders(zip_arr, r+=1)
+            get_offenders(zip_arr, r)
     except Exception as exc:
         print(f"An error occurred: {exc}")
