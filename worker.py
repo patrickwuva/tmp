@@ -18,9 +18,10 @@ def callback(message):
     data_str = message.data.decode('utf-8')
     zip_codes = json.loads(data_str)
     offenders = get_offenders(zip_codes)
-    insert_offenders(offenders)
-    print(f'done with {zip_codes}')
-
+    if offenders != None:
+        insert_offenders(offenders)
+        print(f'done with {zip_codes}')
+    print(f'none for zip {zip_codes}')
     ack_publisher.publish(ack_topic_path, b'',zip_codes=json.dumps(zip_codes))
     message.ack()
 

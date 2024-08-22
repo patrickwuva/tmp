@@ -17,7 +17,9 @@ def get_next_proxy():
     proxy_index = (proxy_index + 1) % len(proxies_list)
     return proxy
 
-def get_offenders(zip_arr):
+def get_offenders(zip_arr, r=0):
+    if r >= 5:
+        return None
 
     proxy = get_next_proxy()
     proxies = {
@@ -65,9 +67,11 @@ def get_offenders(zip_arr):
             return offenders
 
         elif response.status_code == 429:
-            return get_offenders(zip_arr)
+            print(response.json())
+            return get_offenders(zip_arr, r+=1)
         else:
             print(f"Search failed with status code: {response.status_code}")
-            get_offenders(zip_arr)
+            print(response.json())
+            get_offenders(zip_arr, r+=1)
     except Exception as exc:
         print(f"An error occurred: {exc}")
