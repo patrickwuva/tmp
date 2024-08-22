@@ -17,7 +17,7 @@ def callback(message):
     #print(f"Received message: {message.data.decode('utf-8')}")
     data_str = message.data.decode('utf-8')
     zip_codes = json.loads(data_str)
-    offenders = get_offenders(zip_codes, 0)
+    offenders = get_offenders(zip_codes)
     if offenders != None:
         insert_offenders(offenders)
         print(f'done with {zip_codes}')
