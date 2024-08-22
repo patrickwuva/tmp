@@ -2,6 +2,12 @@ import cloudscraper, random
 import json
 from add_offenders import clean_offenders
 
+def get_next_proxy():
+    global proxy_index
+    proxy = proxies_list[proxy_index]
+    proxy_index = (proxy_index + 1) % len(proxies_list)
+    return proxy
+
 def load_proxies(file_path):
     with open(file_path, "r") as f:
         proxies = f.read().splitlines()
@@ -11,13 +17,7 @@ proxies_list = load_proxies("endpoints.txt")
 proxy_index = 0
 retry_zips = []
 
-def get_next_proxy():
-    global proxy_index
-    proxy = proxies_list[proxy_index]
-    proxy_index = (proxy_index + 1) % len(proxies_list)
-    return proxy
-
-def get_offenders(zip_arr, r):
+def get_offenders(zip_arr, r=0):
     if r >= 5:
         return None
 
@@ -59,35 +59,32 @@ def get_offenders(zip_arr, r):
         response = scraper.post(search_url, headers=search_headers, json=search_data, proxies=proxies)
 
         if response.status_code == 200:
-            content = response.headers.get('Content-Type')
-            if content and 'application/json' in content:
+            content_type = response.headers.get('Content-Type')
+            if content_type and 'application/json' in content_type:
                 try:
                     data = response.json()
                     if 'offenders' in data:
                         offenders = clean_offenders(data['offenders'])
                         return offenders
                     else:
-                        print(f'No offenders data for zip {zip_arr}: {response.text}')
+                        print(f"No offenders data for zip {zip_arr}")
+                        return None
                 except json.JSONDecodeError:
-                    print(f'Error decoding JSON for zip {zip_zip}: {response.text}')
+                    print(f"Error decoding JSON for zip {zip_arr}: {response.text}")
             else:
-                print(f'unexpected content type: {content_type}')
-                print(f'response text: {response.text}')
-            for z in zip_arr:
-                if z in retry_zips:
-                    retry_zips.remove(z)
-            data = response.json()
-            offenders = clean_offenders(data['offenders'])
-            return offenders
+                print(f"Unexpected content type: {content_type}")
+                print(f"Response text: {response.text}")
 
         elif response.status_code == 429:
-            r+=1
-            print(f'response: {response.json()}')
+            r += 1
+            print(f"Rate limit hit for zip {zip_arr}, retrying... Attempt {r}")
             return get_offenders(zip_arr, r)
         else:
-            r+=1
-            print(f"Search failed with status code: {response.status_code}")
-            print(f'response: {response.json()}')
-            get_offenders(zip_arr, r)
+            r += 1
+            print(f"Search failed with status code: {response.status_code} for zip {zip_arr}")
+            print(f"Response text: {response.text}")
+            return get_offenders(zip_arr, r)
     except Exception as exc:
-        print(f"An error occurred: {exc}")
+        print(f"An error occurred: {exc} for zip {zip_arr}")
+
+    return None
