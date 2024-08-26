@@ -28,3 +28,8 @@ class based:
         self.cursor.execute("SELECT DISTINCT zipcode FROM offenders")
         return [z[0] for z in self.cursor.fetchall()]
 
+    def get_image_links(self, state):
+        query = "SELECT image_link FROM offenders WHERE state = %s LIMIT 100;"
+        self.cursor.execute(query, (state,))
+        return [i[0] for i in self.cursor.fetchall()]
+
