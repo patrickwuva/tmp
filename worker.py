@@ -30,6 +30,8 @@ def push_images(message):
     print(links)
     try:
         get_images(links)
+        print(f'done with links')
+        ack_publisher.publish(ack_topic_path, b'',zip_codes=json.dumps(0))
         message.ack()
     except Exception as e:
         print(f'error: {e}')
