@@ -15,20 +15,25 @@ def upload(bucket_name, file_name, destination):
     print(f'Image uploaded to {blob_name}')
 
 
-def download(link):
+def download_image(link):
+    os.makedirs('images', exist_ok=True)
+
     name = link.split('/')[-1]
+
+    if '?' in name or '&' in name:
+        name = name.split('?')[0] 
+
     response = requests.get(link)
     if response.status_code == 200:
         with open(f'images/{name}', 'wb') as file:
             file.write(response.content)
-        print(f'got image {name}')
     else:
-        print(f'failed to download {link}, code: {response.status_code}')
+        print(f'Failed to download {link}, status code: {response.status_code}')
 
 def get_images(links):
     threads = []
     for link in links:
-        thread = threading.Thread(target=download, args=(link,))
+        thread = threading.Thread(target=download_image, args=(link,))
         threads.append(thread)
         thread.start()
 
