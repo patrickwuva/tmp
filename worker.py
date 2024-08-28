@@ -30,7 +30,6 @@ def push_images(message):
     print(links)
     try:
         get_images(links)
-        process_images()
         message.ack()
     except Exception as e:
         print(f'error: {e}')

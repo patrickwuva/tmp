@@ -27,7 +27,7 @@ def download(link):
 def get_images(links):
     threads = []
     for link in links:
-        thread = threading.Thread(target_download, args=(link,))
+        thread = threading.Thread(target=download, args=(link,))
         threads.append(thread)
         thread.start()
 
