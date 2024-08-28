@@ -18,16 +18,12 @@ def callback(message):
     data_str = message.data.decode('utf-8')
     zip_codes = json.loads(data_str)
 
-    def process_batch():
-        offenders = get_offenders(zip_codes)
-        if offenders != None:
-            insert_offenders(offenders)
-            print(f'done with {zip_codes}')
-            ack_publisher.publish(ack_topic_path, b'',zip_codes=json.dumps(zip_codes))
-            message.ack()
-
-    thread = threading.Thread(target=process_batch)
-    thread.start()
+    offenders = get_offenders(zip_codes)
+    if offenders != None:
+        insert_offenders(offenders)
+        print(f'done with {zip_codes}')
+        ack_publisher.publish(ack_topic_path, b'',zip_codes=json.dumps(zip_codes))
+        message.ack()
 
 def push_images(message):
     data_str = message.data.decode('utf-8')
@@ -40,7 +36,7 @@ def push_images(message):
         message.ack()
     except Exception as e:
         print(f'error: {e}')
-streaming_pull_future = subscriber.subscribe(subscription_path, callback=push_images)
+streaming_pull_future = subscriber.subscribe(subscription_path, callback=callback)
 print(f"Listening for messages on {subscription_path}...")
 
 try:
