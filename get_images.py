@@ -18,14 +18,11 @@ def upload(bucket_name, file_name, destination):
 def download_image(link):
     os.makedirs('images', exist_ok=True)
 
-    name = link.split('/')[-1]
-
-    if '?' in name or '&' in name:
-        name = name.split('?')[0] 
+    offender_id = link.split('srn=')[-1]
 
     response = requests.get(link)
     if response.status_code == 200:
-        with open(f'images/{name}', 'wb') as file:
+        with open(f'images/{offender_id}.jpg', 'wb') as file:
             file.write(response.content)
     else:
         print(f'Failed to download {link}, status code: {response.status_code}')
