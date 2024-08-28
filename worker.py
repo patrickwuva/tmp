@@ -3,6 +3,7 @@ from add_offenders import insert_offenders
 from get_offenders import get_offenders
 from get_images import get_images, process_images
 import json
+import threading
 
 project_id = "global-sun-431221-s9"
 subscription_id = "scrape"
@@ -14,15 +15,19 @@ ack_publisher = pubsub_v1.PublisherClient()
 ack_topic_path = ack_publisher.topic_path(project_id, ack_topic_id)
 
 def callback(message):
-
     data_str = message.data.decode('utf-8')
     zip_codes = json.loads(data_str)
-    offenders = get_offenders(zip_codes)
-    if offenders != None:
-        insert_offenders(offenders)
-        print(f'done with {zip_codes}')
-        ack_publisher.publish(ack_topic_path, b'',zip_codes=json.dumps(zip_codes))
-        message.ack()
+
+    def process_batch():
+        offenders = get_offenders(zip_codes)
+        if offenders != None:
+            insert_offenders(offenders)
+            print(f'done with {zip_codes}')
+            ack_publisher.publish(ack_topic_path, b'',zip_codes=json.dumps(zip_codes))
+            message.ack()
+
+    thread = threading.Thread(target=process_batch)
+    thread.start()
 
 def push_images(message):
     data_str = message.data.decode('utf-8')
