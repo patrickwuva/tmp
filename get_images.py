@@ -21,6 +21,7 @@ def download(link):
     if response.status_code == 200:
         with open(f'images/{name}', 'wb') as file:
             file.write(response.content)
+        print(f'got image {name}')
     else:
         print(f'failed to download {link}, code: {response.status_code}')
 
