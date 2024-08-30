@@ -36,7 +36,7 @@ def push_images(message):
         message.ack()
     except Exception as e:
         print(f'error: {e}')
-streaming_pull_future = subscriber.subscribe(subscription_path, callback=callback)
+streaming_pull_future = subscriber.subscribe(subscription_path, callback=push_images)
 print(f"Listening for messages on {subscription_path}...")
 
 try:
