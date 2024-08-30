@@ -81,8 +81,3 @@ def process_images():
     embeddings.update(new_embeddings)
     upload_json('offender-embeddings', embeddings, 'embeddings.json')
 
-def main():
-    process_images()
-
-if __name__ == '__main__':
-    main()
