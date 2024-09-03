@@ -32,8 +32,8 @@ def download(bucket_name, blob_name, file):
 def download_image(link):
     os.makedirs('images', exist_ok=True)
 
-    offender_id = link.split('srn=')[-1]
-
+    #offender_id = link.split('srn=')[-1]
+    offender_id = os.path.basename(link)
     response = requests.get(link)
     if response.status_code == 200:
         with open(f'{offender_id}.jpg', 'wb') as file:
