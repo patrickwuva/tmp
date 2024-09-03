@@ -36,7 +36,7 @@ def download_image(link):
     offender_id = os.path.basename(link)
     response = requests.get(link)
     if response.status_code == 200:
-        with open(f'{offender_id}.jpg', 'wb') as file:
+        with open(f'images/{offender_id}.jpg', 'wb') as file:
             file.write(response.content)
     else:
         print(f'Failed to download {link}, status code: {response.status_code}')
@@ -71,7 +71,7 @@ def process_images():
         try:
             #id = os.path.basename(file)
             new_embeddings[file] = get_embedding(file)
-            upload('offender-images',file, f'images/{file}')
+            upload('offender-images',file, f'{file}')
             os.remove(file)
         except Exception as e:
             print(f'error processing {file}: {e}')
