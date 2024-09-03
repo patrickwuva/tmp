@@ -70,7 +70,7 @@ def process_images():
     for file in glob.glob('images/*'):
         try:
             #id = os.path.basename(file)
-            new_embeddings[file] = get_embedding(file)
+            #new_embeddings[file] = get_embedding(file)
             upload('offender-images',file, f'{file}')
             os.remove(file)
         except Exception as e:
