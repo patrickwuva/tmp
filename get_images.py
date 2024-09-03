@@ -7,7 +7,7 @@ import os
 import glob
 import threading
 import requests
-from deepface import DeepFace
+#from deepface import DeepFace
 
 def upload_json(bucket_name, data, destination):
     client = storage.Client()
@@ -51,7 +51,7 @@ def get_images(links):
     for thread in threads:
         thread.join()
 
-
+"""
 def get_embedding(path):
     return DeepFace.represent(img_path=path, model_name="Facenet", enforce_detection=False)[0]['embedding']
 
@@ -64,7 +64,7 @@ def load_embeddings(bucket_name, blob_name, local_file):
 def update_embeddings(embeddings, new_embeddings):
     embeddings.update(new_embeddings)
     return embeddings
-
+"""
 def process_images():
     new_embeddings = {}
     for file in glob.glob('images/*'):
