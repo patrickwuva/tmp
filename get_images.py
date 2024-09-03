@@ -69,7 +69,7 @@ def process_images():
     new_embeddings = {}
     for file in glob.glob('images/*'):
         try:
-            id = os.path.basename(file)
+            #id = os.path.basename(file)
             new_embeddings[file] = get_embedding(file)
             upload('offender-images',file, f'images/{file}')
             os.remove(file)
@@ -77,7 +77,7 @@ def process_images():
             print(f'error processing {file}: {e}')
 
     #embeddings = load_embeddings('offender-embeddings', 'embeddings.json', 'embeddings.json')
-    embeddings = {}
-    embeddings.update(new_embeddings)
-    upload_json('offender-embeddings', embeddings, 'embeddings.json')
+    #embeddings = {}
+    #embeddings.update(new_embeddings)
+    #upload_json('offender-embeddings', embeddings, 'embeddings.json')
 
