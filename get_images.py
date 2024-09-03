@@ -36,7 +36,7 @@ def download_image(link):
 
     response = requests.get(link)
     if response.status_code == 200:
-        with open(f'images/{offender_id}.jpg', 'wb') as file:
+        with open(f'{offender_id}.jpg', 'wb') as file:
             file.write(response.content)
     else:
         print(f'Failed to download {link}, status code: {response.status_code}')
