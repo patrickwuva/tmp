@@ -31,7 +31,7 @@ def push_images(message):
     print(links)
     try:
         get_images(links)
-        process_images()
+        #process_images()
         print(f'done with links')
         ack_publisher.publish(ack_topic_path, b'',zip_codes=json.dumps(0))
         message.ack()
