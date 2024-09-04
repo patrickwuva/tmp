@@ -8,6 +8,7 @@ import glob
 import threading
 import requests
 #from deepface import DeepFace
+import re
 
 def upload_json(bucket_name, data, destination):
     client = storage.Client()
@@ -32,8 +33,11 @@ def download(bucket_name, blob_name, file):
 def download_image(link):
     os.makedirs('images', exist_ok=True)
 
-    offender_id = link.split('sid=')[-1]
+    #offender_id = link.split('sid=')[-1]
     #offender_id = os.path.basename(link)
+    match = re.search(r"Offender/(\d+)/avatar", link)
+    
+    offender_id = match.group(1) 
     response = requests.get(link)
     if response.status_code == 200:
         with open(f'images/{offender_id}.jpg', 'wb') as file:
