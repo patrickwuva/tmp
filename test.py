@@ -11,7 +11,7 @@ def send_ack():
 def get_images():
     tasks = sqs.get_queue_by_name(QueueName='tasks')
 
-    messages = queue.receive_messages(
+    messages = tasks.receive_messages(
         MaxNumberOfMessages=1,
         WaitTimeSeconds=2
     )
