@@ -9,7 +9,7 @@ def send_ack():
     response = queue.send_message(MessageBody='done')
 
 def get_images():
-    tasks = sqs.get_queue_by-name(QueueName='tasks')
+    tasks = sqs.get_queue_by_name(QueueName='tasks')
 
     messages = queue.receive_messages(
         MaxNumberOfMessages=1,
