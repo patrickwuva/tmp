@@ -10,6 +10,10 @@ def send_ack():
 
 def process_messages():
     tasks_queue = sqs.get_queue_by_name(QueueName='tasks')
+    
+    # Counter to track how many times we've waited without receiving messages
+    empty_poll_count = 0
+    max_empty_polls = 3  # Define how many empty polls to allow before exiting
 
     # Infinite loop to continuously poll the queue for messages
     while True:
@@ -22,6 +26,9 @@ def process_messages():
         if messages:
             for m in messages:
                 try:
+                    # Reset the empty poll counter on receiving a message
+                    empty_poll_count = 0
+                    
                     # Load the list of links from the message body
                     links = json.loads(m.body)
                     print(f"Processing links: {links}")
@@ -39,6 +46,13 @@ def process_messages():
                     print(f"Error processing message: {e}")
         else:
             print("No messages received. Waiting for new messages...")
+            empty_poll_count += 1
+
+        # Exit the loop if we have waited for messages multiple times without receiving any
+        if empty_poll_count >= max_empty_polls:
+            print(f"No messages received after {max_empty_polls} attempts. Exiting.")
+            break
 
 if __name__ == '__main__':
     process_messages()
+
