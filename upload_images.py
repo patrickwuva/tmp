@@ -15,7 +15,7 @@ def upload_folder_to_bucket(bucket_name, local_folder_path, bucket_folder_path):
 
             blob = bucket.blob(blob_name)
             blob.upload_from_filename(local_file_path)
-
+            os.remove(local_file_path)
             print(f'Uploaded {local_file_path} to gs://{bucket_name}/{blob_name}')
 
 bucket_name = 'offender-images'
