@@ -9,6 +9,7 @@ import threading
 import requests
 #from deepface import DeepFace
 import re
+import imghdr
 
 def upload_json(bucket_name, data, destination):
     client = storage.Client()
@@ -36,12 +37,14 @@ def download_image(link):
     #offender_id = link.split('sid=')[-1]
     #offender_id = os.path.basename(link)
     match = re.search(r"Offender/(\d+)/avatar", link)
-    
-    offender_id = match.group(1) 
+
+    offender_id = match.group(1)
     response = requests.get(link)
     if response.status_code == 200:
-        with open(f'images/{offender_id}.jpg', 'wb') as file:
-            file.write(response.content)
+        image_type = imghdr.what(None, h=response.contnet)
+        if image_type:
+            with open(f'images/{offender_id}.{image_type}', 'wb') as file:
+                file.write(response.content)
     else:
         print(f'Failed to download {link}, status code: {response.status_code}')
 
@@ -54,21 +57,6 @@ def get_images(links):
 
     for thread in threads:
         thread.join()
-
-"""
-def get_embedding(path):
-    return DeepFace.represent(img_path=path, model_name="Facenet", enforce_detection=False)[0]['embedding']
-
-def load_embeddings(bucket_name, blob_name, local_file):
-    download(bucket_name, blob_name, local_file)
-    with open(local_file, 'r') as f:
-        embeddings = json.load(f)
-    return embeddings
-
-def update_embeddings(embeddings, new_embeddings):
-    embeddings.update(new_embeddings)
-    return embeddings
-"""
 def process_images():
     new_embeddings = {}
     for file in glob.glob('images/*'):
@@ -77,4 +65,8 @@ def process_images():
             os.remove(file)
         except Exception as e:
             print(f'error processing {file}: {e}')
-
+def main():
+    db = based()
+    db.connect()
+    links = db.get_links('VA')
+    get_images(links)
