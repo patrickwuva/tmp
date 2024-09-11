@@ -89,7 +89,7 @@ def get_offenders(zip_arr):
 
 def main():
     us_zips = pd.read_csv('zips.csv')
-    zips = us_zips[us_zips['state_id'] == 'NY']['county_weights'][0].tolist()
+    zips = us_zips[us_zips['state'] == 'NY']['ZIP'].tolist()
     print(len(zips))
 
 if __name__ == '__main__':
