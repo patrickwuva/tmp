@@ -65,7 +65,7 @@ def download_image(link, retry_limit=3):
     return None
 
 
-def get_images(links, max_threads=25):
+def get_images(links, max_threads=1000):
     threads = []
     for link in links:
         if len(threads) >= max_threads:
