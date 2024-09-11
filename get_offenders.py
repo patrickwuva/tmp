@@ -98,6 +98,7 @@ def main():
     
     for z in zips:
         if len(z) < 5:
+            print(z)
             print('whoops')
 
 
