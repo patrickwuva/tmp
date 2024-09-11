@@ -10,7 +10,7 @@ import requests
 #from deepface import DeepFace
 import re
 import imghdr
-
+import time
 def upload_json(bucket_name, data, destination):
     client = storage.Client()
     bucket = client.bucket(bucket_name)
@@ -36,16 +36,19 @@ def download_image(link):
 
     #offender_id = link.split('sid=')[-1]
     #offender_id = os.path.basename(link)
-    match = re.search(r"Offender/(\d+)/avatar", link)
-
-    offender_id = match.group(1)
-    response = requests.get(link)
+    offender_id = link.split('/')[-1]
+    username = 'spxwhjvleu'
+    password = 'Bydk9qPurElL5_3q1v'
+    proxy = f"http://{username}:{password}@gate.smartproxy.com:7000"
+    response = requests.get(link, proxies = proxy)
     if response.status_code == 200:
         image_type = imghdr.what(None, h=response.contnet)
         if image_type:
             with open(f'images/{offender_id}.{image_type}', 'wb') as file:
                 file.write(response.content)
     else:
+        time.sleep(2)
+        download_image(link)
         print(f'Failed to download {link}, status code: {response.status_code}')
 
 def get_images(links):
