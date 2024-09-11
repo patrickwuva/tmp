@@ -2,6 +2,7 @@ import cloudscraper, random
 import json
 from add_offenders import clean_offenders
 import time
+import pandas as pd
 
 def get_next_proxy():
     global proxy_index
@@ -85,3 +86,11 @@ def get_offenders(zip_arr):
         print(f"An error occurred: {exc} for zip {zip_arr}")
 
     return None
+
+def main():
+    us_zips = pd.read_csv('zips.csv')
+    zips = us_zips[us_zips['state'] == 'NY']['code'].tolist()
+    print(len(zips))
+
+if __name__ == '__main__':
+    main()
