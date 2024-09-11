@@ -71,5 +71,9 @@ def process_images():
 def main():
     db = based()
     db.connect()
-    links = db.get_links('VA')
+    links = db.get_image_links('VA')
     get_images(links)
+
+
+if __name__ == '__main__':
+    main()
