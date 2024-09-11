@@ -40,7 +40,7 @@ def download_image(link):
     username = 'spxwhjvleu'
     password = 'Bydk9qPurElL5_3q1v'
     proxy = f"http://{username}:{password}@gate.smartproxy.com:7000"
-    response = requests.get(link, proxies = proxy)
+    response = requests.get(link, proxies = {'http': proxy})
     if response.status_code == 200:
         image_type = imghdr.what(None, h=response.contnet)
         if image_type:
