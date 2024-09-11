@@ -42,7 +42,7 @@ async def get_offenders(session, zip_code, proxy, retries=3):
     
     for attempt in range(retries):
         try:
-            proxy = 'http://spxwhjvleu:Bydk9qPurElL5_3q1v@us.smartproxy.com:10000'
+            proxy = 'https://spxwhjvleu:Bydk9qPurElL5_3q1v@us.smartproxy.com:10000'
             async with session.post(search_url, headers=search_headers, json=search_data, proxy=proxy) as response:
                 if response.status == 200:
                     data = await response.json()
