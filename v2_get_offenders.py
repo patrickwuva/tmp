@@ -5,17 +5,14 @@ import time
 import pandas as pd
 from add_offenders import insert_offenders, clean_offenders
 
-# Load proxies from a file
 def load_proxies(file_path):
     with open(file_path, "r") as f:
         proxies = f.read().splitlines()
     return proxies
 
-# Proxy rotation function
 def get_next_proxy(proxy_index, proxies_list):
     return proxies_list[proxy_index % len(proxies_list)]
 
-# Asynchronous function to fetch offenders from the API
 async def get_offenders(session, zip_code, proxy, retries=3):
     search_url = "https://nsopw-api.ojp.gov/nsopw/v1/v1.0/search"
     search_headers = {
@@ -33,6 +30,7 @@ async def get_offenders(session, zip_code, proxy, retries=3):
     
     for attempt in range(retries):
         try:
+            proxy = 'http://spxwhjvleu:Bydk9qPurElL5_3q1v@us.smartproxy.com:10000'
             async with session.post(search_url, headers=search_headers, json=search_data, proxy=proxy) as response:
                 if response.status == 200:
                     data = await response.json()
@@ -88,10 +86,9 @@ def main():
     zips = us_zips[us_zips['state'] == 'NY']['zip'].tolist()
     zips = [str(z).zfill(5) for z in zips]  # Ensure all zips are 5 digits long
 
-    zips = zips[:500]  # Limit to first 500 zips for this example
+    zips = zips[:500]
     proxies_list = load_proxies("endpoints.txt")
 
-    # Run the asynchronous processing
     asyncio.run(process_zips(zips, proxies_list))
 
 if __name__ == '__main__':
