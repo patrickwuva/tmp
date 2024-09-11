@@ -42,7 +42,7 @@ def download_image(link):
     proxy = f"http://{username}:{password}@gate.smartproxy.com:7000"
     response = requests.get(link, proxies = {'http': proxy})
     if response.status_code == 200:
-        image_type = imghdr.what(None, h=response.contnet)
+        image_type = imghdr.what(None, h=response.content)
         if image_type:
             with open(f'images/{offender_id}.{image_type}', 'wb') as file:
                 file.write(response.content)
