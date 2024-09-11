@@ -43,7 +43,7 @@ async def get_offenders(session, zip_code, proxy, retries=3):
     for attempt in range(retries):
         try:
             proxy = 'https://spxwhjvleu:Bydk9qPurElL5_3q1v@us.smartproxy.com:10000'
-            async with session.post(search_url, headers=search_headers, json=search_data)as response:#, proxy=proxy) as response:
+            async with session.post(search_url, headers=search_headers, json=search_data, proxy=proxy) as response:
                 if response.status == 200:
                     data = await response.json()
                     if 'offenders' in data:
@@ -99,7 +99,7 @@ def main():
     zips = [str(z).zfill(5) for z in zips]  # Ensure all zips are 5 digits long
 
     zips = zips[:500]
-    proxies_list = load_proxies("proxies.txt")
+    proxies_list = load_proxies("prox.txt")
 
     asyncio.run(process_zips(zips, proxies_list))
 
