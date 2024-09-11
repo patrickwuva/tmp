@@ -7,7 +7,7 @@ import imghdr
 import time
 import json
 from based import based  # Assuming this is a custom module
-
+total = 0
 # Function to upload JSON data to Google Cloud Storage
 def upload_json(bucket_name, data, destination):
     client = storage.Client()
@@ -40,7 +40,7 @@ def download_image(link, retry_limit=3):
     password = 'Bydk9qPurElL5_3q1v'
     proxy = f"http://{username}:{password}@gate.smartproxy.com:7000"
     retries = 0
-
+    global total
     while retries < retry_limit:
         try:
             response = requests.get(link, proxies={'http': proxy}, timeout=10)  # Added timeout
@@ -50,7 +50,8 @@ def download_image(link, retry_limit=3):
                     image_path = f'images/{offender_id}.{image_type}'
                     with open(image_path, 'wb') as file:
                         file.write(response.content)
-                    print(f'Image {image_path} downloaded')
+                        total+=1
+                    print(f'{total} images downloaded')
                     return image_path  # Return the file path for later use
             else:
                 print(f'Failed to download {link}, status code: {response.status_code}')
@@ -64,7 +65,7 @@ def download_image(link, retry_limit=3):
     return None
 
 
-def get_images(links, max_threads=10):
+def get_images(links, max_threads=25):
     threads = []
     for link in links:
         if len(threads) >= max_threads:
