@@ -91,13 +91,12 @@ def main():
     us_zips = pd.read_csv('zips.csv')
     zips = us_zips[us_zips['state'] == 'NY']['zip'].tolist()
     zips = [str(z) for z in zips]
-    for z in zips:
-        if z == '501':
-            print(z)
+    for i in range(len(zips)):
+        z = zips[i]
         if len(z) < 5:
             zeros = 5-len(z)
-            z = '0' * zeros + z
-    
+            zips[i] = '0' * zeros + z
+
     for z in zips:
         if len(z) < 5:
             print(z)
