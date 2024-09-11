@@ -90,6 +90,17 @@ def get_offenders(zip_arr):
 def main():
     us_zips = pd.read_csv('zips.csv')
     zips = us_zips[us_zips['state'] == 'NY']['zip'].tolist()
+    zips = [str(z) for z in zips]
+    for z in zips:
+        if len(z) < 5:
+            zeros = 5-len(z)
+            z = '0' * zeros + z
+    
+    for z in zips:
+        if len(z) < 5:
+            print('whoops')
+
+
     print(len(zips))
 
 if __name__ == '__main__':
