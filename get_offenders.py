@@ -22,8 +22,8 @@ retry_zips = []
 
 def get_offenders(zip_arr):
     #proxy = get_next_proxy()
-    #proxy = "http://customer-patrick_5zLji-cc-us:OX___psalm3422@pr.oxylabs.io:7777"
-    proxy = 'http://spxwhjvleu:Bydk9qPurElL5_3q1v@us.smartproxy.com:10000'
+    proxy = "http://customer-patrick_5zLji-cc-us:OX___psalm3422@pr.oxylabs.io:7777"
+    #proxy = 'http://spxwhjvleu:Bydk9qPurElL5_3q1v@us.smartproxy.com:10000'
     proxies = {
         "http": proxy
     }
