@@ -92,6 +92,8 @@ def main():
     zips = us_zips[us_zips['state'] == 'NY']['zip'].tolist()
     zips = [str(z) for z in zips]
     for z in zips:
+        if z == '501':
+            print(z)
         if len(z) < 5:
             zeros = 5-len(z)
             z = '0' * zeros + z
