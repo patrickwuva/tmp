@@ -71,7 +71,8 @@ def process_images():
 def main():
     db = based()
     db.connect()
-    links = db.get_image_links('VA')
+    links = db.get_image_links('PA')
+    db.close()
     get_images(links)
 
 
