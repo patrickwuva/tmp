@@ -79,7 +79,7 @@ async def process_zips(zips, proxies_list, max_concurrent_requests=50):
             proxy = get_next_proxy(proxy_index, proxies_list)
             proxy_index += 1  # Rotate to the next proxy
 
-            task = asyncio.create_task(get_offenders(session, zip_code, proxy))
+            task = asyncio.create_task(get_offenders(session, [zip_code], proxy))
             tasks.append(task)
 
         results = await asyncio.gather(*tasks)
