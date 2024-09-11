@@ -67,6 +67,7 @@ def get_offenders(zip_arr):
                     data = response.json()
                     if 'offenders' in data:
                         offenders = clean_offenders(data['offenders'])
+                        print(f'done with offenders {zip_arr}')
                         return offenders
                     else:
                         print(f"No offenders data for zip {zip_arr}")
