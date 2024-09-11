@@ -43,7 +43,7 @@ def download_image(link, retry_limit=3):
     global total
     while retries < retry_limit:
         try:
-            response = requests.get(link, proxies={'http': proxy}, timeout=10)  # Added timeout
+            response = requests.get(link, proxies={'http': proxy}, timeout=500)  # Added timeout
             if response.status_code == 200:
                 image_type = imghdr.what(None, h=response.content)
                 if image_type:
