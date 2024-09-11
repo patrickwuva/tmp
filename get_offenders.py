@@ -100,7 +100,7 @@ def main():
             zeros = 5-len(z)
             zips[i] = '0' * zeros + z
     
-    zips = [:500]
+    zips = zips[:500]
     max_threads = 50
     threads = []
     for zip in zips:
