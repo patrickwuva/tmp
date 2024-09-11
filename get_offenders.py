@@ -1,8 +1,9 @@
 import cloudscraper, random
 import json
-from add_offenders import clean_offenders
+from add_offenders import clean_offenders, insert_offenders
 import time
 import pandas as pd
+import threading
 
 def get_next_proxy():
     global proxy_index
@@ -21,7 +22,8 @@ retry_zips = []
 
 def get_offenders(zip_arr):
     #proxy = get_next_proxy()
-    proxy = "http://customer-patrick_5zLji-cc-us:OX___psalm3422@pr.oxylabs.io:7777"
+    #proxy = "http://customer-patrick_5zLji-cc-us:OX___psalm3422@pr.oxylabs.io:7777"
+    proxy = 'http://spxwhjvleu:Bydk9qPurElL5_3q1v@us.smartproxy.com:10000'
     proxies = {
         "http": proxy
     }
@@ -87,6 +89,7 @@ def get_offenders(zip_arr):
 
     return None
 
+
 def main():
     us_zips = pd.read_csv('zips.csv')
     zips = us_zips[us_zips['state'] == 'NY']['zip'].tolist()
@@ -96,14 +99,21 @@ def main():
         if len(z) < 5:
             zeros = 5-len(z)
             zips[i] = '0' * zeros + z
+    
+    zips = [:500]
+    max_threads = 50
+    threads = []
+    for zip in zips:
+        if len(threads) > max_threads:
+            for thread in threads:
+                thread.join()
+            threads.clear()
 
-    for z in zips:
-        if len(z) < 5:
-            print(z)
-            print('whoops')
+        thread = threading.Thread(target=insert_offenders, args=(get_offenders([zip]),))
+        threads.append(thread)
 
-
-    print(len(zips))
-
+    for thread in threads:
+        thread.join()
+    
 if __name__ == '__main__':
     main()
